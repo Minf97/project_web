@@ -1,5 +1,9 @@
 <template>
-  <div class="container" :style="{ '--opacity': opacity }">
+  <div
+    class="container"
+    :style="{ '--opacity': opacity }"
+    @click="cancelLoginBox"
+  >
     <div class="a" @click="popLoginBox">
       <div class="b">
         <span>广油星社</span>
@@ -61,8 +65,18 @@ export default {
     };
   },
   methods: {
+    //   点击别处，登录框消失，遮罩层消失
+    cancelLoginBox() {
+      if (this.isDisplay == "block") this.isDisplay = "none";
+      this.opacity = 0;
+      console.log("触发cancelLoginBox函数");
+    },
     popLoginBox() {
-      this.isDisplay = "block";
+      // 设置一个延时，避免与上面cancelLoginBox冲突
+      setTimeout(() => {
+        this.isDisplay = "block";
+      }, 30);
+      console.log("触发popLoginBox函数");
       //   遮罩层动画渐变效果，需优化 ********************
       const x = setInterval(() => {
         this.opacity += 0.2;
