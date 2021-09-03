@@ -1,11 +1,14 @@
 <template>
-  <div id="app"></div>
+  <div id="app">
+    <Login />
+  </div>
 </template>
 
 <script>
+import Login from "./components/Login.vue";
 export default {
   name: "App",
-  components: {},
+  components: { Login },
 };
 </script>
 
