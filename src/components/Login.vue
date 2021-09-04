@@ -1,90 +1,44 @@
 <template>
-  <div
-    class="container"
-    :style="{ '--opacity': opacity }"
-    @click="cancelLoginBox"
-  >
-    <div class="a" @click="popLoginBox">
+  <!-- 背景 -->
+  <div class="container">
+    <div
+      class="a"
+      @click="emitPop(), zIndexChange()"
+      :style="{ '--z-index': zIndex }"
+    >
       <div class="b">
         <span>广油星社</span>
       </div>
     </div>
-    <!-- 登录框 -->
-    <div class="loginBox" :style="{ '--display': isDisplay }">
-      <div class="inputClass">
-        <form action="index.html">
-          <!-- 一行两列，栅格排列，4 - 18 -->
-          <el-row class="inputLine">
-            <el-col :span="4" class="inputText">
-              <label for="userAccount">账 号：</label>
-            </el-col>
-            <el-col :span="18">
-              <el-input
-                id="userAccount"
-                v-model="userAccount"
-                placeholder="请输入内容"
-              ></el-input>
-            </el-col>
-          </el-row>
-
-          <!-- 一行两列，栅格排列，4 - 18 -->
-          <el-row class="inputLine">
-            <el-col :span="4" class="inputText">
-              <label for="userPassword">密 码：</label>
-            </el-col>
-            <el-col :span="18">
-              <el-input
-                id="userPassword"
-                v-model="userPassword"
-                placeholder="请输入密码"
-                show-password
-              ></el-input>
-            </el-col>
-          </el-row>
-
-          <!-- 提交按钮 -->
-          <el-row type="flex" justify="center">
-            <el-button type="info">登录</el-button>
-          </el-row>
-          <a href="#" class="registerRoute">没有账号？点击注册</a>
-        </form>
-      </div>
-    </div>
+    <LoginBox />
   </div>
 </template>
 
 <script>
+import LoginBox from "./LoginBox_zheZhaoCeng.vue";
+
+import { mapMutations, mapState } from "vuex";
 export default {
   name: "Login",
+  components: { LoginBox },
   data() {
     return {
-      isDisplay: "none",
-      opacity: 0,
-      userAccount: "",
-      userPassword: "",
+      pop: true,
     };
   },
   methods: {
-    //   点击别处，登录框消失，遮罩层消失
-    cancelLoginBox() {
-      if (this.isDisplay == "block") this.isDisplay = "none";
-      this.opacity = 0;
-      console.log("触发cancelLoginBox函数");
+    emitPop() {
+      //   事件全局总线，向组件LoginBox_zheZhaoCeng发送数据
+      this.$bus.$emit("pop", this.pop);
+      console.log("向组件emit了pop");
+      //   把 zIndex 调成CSS无法解析的数值，这样边框消失，文字也可以凸显出来 **********
     },
-    popLoginBox() {
-      // 设置一个延时，避免与上面cancelLoginBox冲突
-      setTimeout(() => {
-        this.isDisplay = "block";
-      }, 30);
-      console.log("触发popLoginBox函数");
-      //   遮罩层动画渐变效果，需优化 ********************
-      const x = setInterval(() => {
-        this.opacity += 0.2;
-        console.log("1");
-        if (this.opacity >= 1) clearInterval(x);
-      }, 20);
-    },
+    ...mapMutations(["zIndexChange"]),
   },
+  computed: {
+    ...mapState(["zIndex"]),
+  },
+  mounted() {},
 };
 </script>
 
@@ -105,19 +59,9 @@ export default {
   display: flex;
   justify-content: center;
 }
-/* 遮罩层 */
-.container::after {
-  /* display: var(--display); */
-  content: "";
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  /* 遮罩层颜色 */
-  background-color: rgba(0, 0, 0, 0.6);
-  opacity: var(--opacity);
-}
 
 .a {
+  z-index: var(--z-index);
   user-select: none;
   position: relative;
   top: 180px;
@@ -241,56 +185,5 @@ export default {
     clip-path: inset(80% 0px 0px 0px);
     transform: translate(0px, 0px);
   }
-}
-
-.loginBox {
-  z-index: 99;
-  display: var(--display);
-  position: absolute;
-  width: 380px;
-  height: 400px;
-  top: 185px;
-  left: 526px;
-  border-radius: 20px;
-  background: linear-gradient(
-    to right bottom,
-    rgba(255, 255, 255, 0.4),
-    rgba(255, 255, 255, 0.1)
-  );
-  backdrop-filter: blur(7px);
-  /* 提升层次感 */
-  box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.2);
-  border-top: 1px solid rgba(255, 255, 255, 0.8);
-  border-left: 1px solid rgba(255, 255, 255, 0.8);
-}
-
-.inputClass {
-  position: relative;
-  top: 120px;
-}
-
-.inputText {
-  position: relative;
-  top: 5px;
-  display: flex;
-  justify-content: center;
-  text-align: center;
-}
-
-.inputLine {
-  margin-bottom: 20px;
-}
-
-.registerRoute {
-  display: flex;
-  justify-content: center;
-  align-content: center;
-  margin-top: 5px;
-  color: #fff;
-  text-decoration: none;
-}
-.registerRoute:hover {
-  text-decoration: underline;
-  text-shadow: 0 0 5px rgb(0, 0, 0, 0.8);
 }
 </style>
