@@ -33,10 +33,10 @@ export default {
       console.log("向组件emit了pop");
       //   把 zIndex 调成CSS无法解析的数值，这样边框消失，文字也可以凸显出来 **********
     },
-    ...mapMutations(["zIndexChange"]),
+    ...mapMutations("LoginStore", ["zIndexChange"]),
   },
   computed: {
-    ...mapState(["zIndex"]),
+    ...mapState("LoginStore", ["zIndex"]),
   },
   mounted() {},
 };

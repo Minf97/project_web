@@ -5,27 +5,20 @@ import Vuex from 'vuex'
 //应用Vuex插件
 Vue.use(Vuex)
 
-//准备actions对象——响应组件中用户的动作
-const actions = {}
-//准备mutations对象——修改state中的数据
-const mutations = {
-    zIndexChange(state) {
-        state.zIndex = 0.1
-    }
+const LoginStore = {
+    namespaced: true,//开启命名空间
+    state: { zIndex: 1 },
+    mutations: {
+        zIndexChange(state) {
+            state.zIndex = 0.1
+        }
+    },
+    actions: {},
 }
-//准备state对象——保存具体的数据
-const state = {
-    zIndex: 1,
-}
-// 准备getter对象——对state的数据进行加工
-// const getter = {
-
-// }
 
 //创建并暴露store
 export default new Vuex.Store({
-    actions,
-    mutations,
-    state,
-    // getter
+    modules: {
+        LoginStore,
+    }
 })

@@ -85,7 +85,7 @@ export default {
       console.log("在LoginBox组件中触发cancelLoginBox函数");
       if (this.isDisplay == "block") this.isDisplay = "none";
       this.opacity = 0;
-      this.$store.state.zIndex = 1;
+      this.$store.state.LoginStore.zIndex = 1;
     },
   },
   mounted() {
